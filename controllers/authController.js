@@ -4,8 +4,9 @@ const bcrypt = require('bcrypt');
 const crypto = require('crypto');
 const nodemailer = require('nodemailer');
 
-const generateToken = (id) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: '30d' });
+const generateToken = (userId) => {
+  // Generate a token with user ID in the payload
+  return jwt.sign({ _id: userId }, process.env.JWT_SECRET, { expiresIn: '1h' });
 };
 
 // Signup
@@ -27,6 +28,10 @@ exports.login = async (req, res) => {
     const user = await User.findOne({ email });
     if (user && await user.comparePassword(password)) {
       const token = generateToken(user._id);
+      
+      // Log the token for debugging
+      console.log('Generated Token:', token);
+
       res.json({ success: true, token });
     } else {
       res.status(400).json({ success: false, message: 'Invalid credentials' });
@@ -35,6 +40,7 @@ exports.login = async (req, res) => {
     res.status(500).json({ success: false, error: error.message });
   }
 };
+
 
 
 

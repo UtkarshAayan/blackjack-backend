@@ -22,8 +22,10 @@ app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser())
 
 const userRoutes = require('./routes/userRoutes');
+const gameRoutes = require('./routes/gameRoutes');
 
 app.use('/api/users', userRoutes);
+app.use('/api/game', gameRoutes);
 
 
 //database connect
